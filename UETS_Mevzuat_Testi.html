@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UETS Mevzuat Testi — EPD.PR02 & USE.002</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16323B;
+    --ink-soft:#4A6168;
+    --mist:#E5EBEB;
+    --paper:#FFFFFF;
+    --line:#D2DCDC;
+    --brand:#00818D;
+    --brand-deep:#0A5A63;
+    --correct:#1F7A57;
+    --correct-bg:#E4F1EB;
+    --wrong:#B23A2E;
+    --wrong-bg:#F6E4E1;
+    --amber:#C98A00;
+    --amber-bg:#F7EDD6;
+    --shadow:0 1px 2px rgba(22,50,59,.06), 0 8px 28px rgba(22,50,59,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--mist);
+    background-image:radial-gradient(circle at 1px 1px, rgba(22,50,59,.05) 1px, transparent 0);
+    background-size:22px 22px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:28px 18px 64px;
+    min-height:100vh;
+  }
+  .wrap{max-width:740px;margin:0 auto}
+
+  .stamp{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;font-weight:500;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--brand-deep);
+  }
+
+  /* ---- header ---- */
+  header{margin-bottom:22px}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;
+    display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  }
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--brand)}
+  h1{
+    font-family:"Newsreader",serif;font-weight:500;font-size:34px;line-height:1.1;
+    letter-spacing:-.01em;margin-bottom:8px;
+  }
+  h1 em{font-style:italic;color:var(--brand-deep)}
+  .sub{color:var(--ink-soft);font-size:15px;max-width:56ch}
+
+  /* ---- card ---- */
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow);padding:26px 26px 22px;
+  }
+
+  /* ---- start screen ---- */
+  .start .deck{display:grid;gap:12px;margin:22px 0 24px}
+  .deck-item{
+    display:flex;gap:14px;align-items:flex-start;
+    border:1px solid var(--line);border-radius:11px;padding:14px 16px;background:#FBFCFC;
+  }
+  .deck-item .code{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+    color:#fff;background:var(--brand-deep);border-radius:6px;padding:5px 8px;white-space:nowrap;flex-shrink:0;
+  }
+  .deck-item .meta{font-size:13.5px}
+  .deck-item .meta strong{display:block;font-weight:600;margin-bottom:2px;font-size:14px}
+  .deck-item .meta span{color:var(--ink-soft)}
+
+  .pick-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+  .picks{display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+  .pick{
+    text-align:left;font:inherit;font-size:14.5px;cursor:pointer;
+    border:1.5px solid var(--line);background:#fff;border-radius:10px;
+    padding:13px 15px;color:var(--ink);transition:.15s;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  }
+  .pick:hover{border-color:var(--brand);background:#F4FAFA}
+  .pick.sel{border-color:var(--brand);background:#EAF6F6;box-shadow:inset 0 0 0 1px var(--brand)}
+  .pick .n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft)}
+
+  .btn{
+    font:inherit;font-weight:600;font-size:15px;cursor:pointer;border:none;border-radius:10px;
+    padding:14px 22px;background:var(--brand-deep);color:#fff;transition:.15s;width:100%;
+    letter-spacing:.01em;
+  }
+  .btn:hover{background:#08474E}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--brand-deep);border:1.5px solid var(--line)}
+  .btn.ghost:hover{background:#F4FAFA;border-color:var(--brand)}
+
+  /* ---- progress ---- */
+  .progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .ptrack{height:6px;background:var(--mist);border-radius:99px;overflow:hidden;flex:1;margin-right:16px}
+  .pfill{height:100%;background:var(--brand);border-radius:99px;transition:width .35s ease}
+  .pcount{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);white-space:nowrap}
+
+  /* ---- question ---- */
+  .q-source{
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+    background:#F0F5F5;border:1px solid var(--line);border-radius:7px;padding:5px 10px;
+  }
+  .q-source .code{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--brand-deep)}
+  .q-source .art{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft)}
+  .q-text{font-size:18px;font-weight:600;line-height:1.4;margin-bottom:20px;letter-spacing:-.005em}
+
+  .opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+  .opt{
+    text-align:left;font:inherit;font-size:15px;cursor:pointer;
+    border:1.5px solid var(--line);background:#fff;border-radius:11px;
+    padding:14px 15px;color:var(--ink);transition:.13s;
+    display:flex;gap:13px;align-items:flex-start;position:relative;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:#F6FBFB}
+  .opt .key{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+    width:24px;height:24px;border-radius:6px;background:var(--mist);color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.13s;
+  }
+  .opt:disabled{cursor:default}
+  .opt.correct{border-color:var(--correct);background:var(--correct-bg)}
+  .opt.correct .key{background:var(--correct);color:#fff}
+  .opt.wrong{border-color:var(--wrong);background:var(--wrong-bg)}
+  .opt.wrong .key{background:var(--wrong);color:#fff}
+  .opt .mark{margin-left:auto;font-weight:700;font-size:14px;flex-shrink:0}
+  .opt.correct .mark{color:var(--correct)}
+  .opt.wrong .mark{color:var(--wrong)}
+
+  .explain{
+    border-left:3px solid var(--brand);background:#F3F8F8;border-radius:0 9px 9px 0;
+    padding:13px 16px;font-size:14px;color:var(--ink);margin-bottom:20px;
+    animation:fade .25s ease;
+  }
+  .explain.miss{border-left-color:var(--amber);background:var(--amber-bg)}
+  .explain b{font-weight:600}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .nav{display:flex;gap:11px}
+  .nav .btn{width:auto;flex:1}
+
+  /* ---- results ---- */
+  .result{text-align:center}
+  .score-ring{
+    width:150px;height:150px;margin:8px auto 18px;position:relative;
+  }
+  .score-ring svg{transform:rotate(-90deg)}
+  .score-ring .pct{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .score-ring .pct b{font-family:"Newsreader",serif;font-weight:500;font-size:42px;line-height:1}
+  .score-ring .pct span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.06em;margin-top:3px}
+  .verdict{font-family:"Newsreader",serif;font-size:22px;font-weight:500;margin-bottom:6px}
+  .result .line{color:var(--ink-soft);font-size:14.5px;margin-bottom:22px}
+  .breakdown{display:grid;gap:10px;margin-bottom:24px;text-align:left}
+  .bd-row{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:9px;padding:11px 14px;background:#FBFCFC}
+  .bd-row .code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:var(--brand-deep)}
+  .bd-row .name{font-size:13px;color:var(--ink-soft);margin-top:2px}
+  .bd-row .frac{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600}
+
+  .review-toggle{margin-top:4px}
+  .review{margin-top:18px;text-align:left;display:none}
+  .review.open{display:block}
+  .rv-item{border-top:1px solid var(--line);padding:14px 0}
+  .rv-item:first-child{border-top:none}
+  .rv-q{font-size:14px;font-weight:600;margin-bottom:6px;display:flex;gap:9px;align-items:flex-start}
+  .rv-q .ic{flex-shrink:0;font-weight:700}
+  .rv-q .ic.ok{color:var(--correct)}
+  .rv-q .ic.no{color:var(--wrong)}
+  .rv-a{font-size:13px;color:var(--ink-soft);margin-left:20px}
+  .rv-a .good{color:var(--correct);font-weight:600}
+
+  footer{text-align:center;margin-top:26px;font-size:12px;color:var(--ink-soft)}
+  footer .stamp{display:block;margin-bottom:5px;color:var(--ink-soft)}
+
+  @media(max-width:560px){
+    body{padding:20px 12px 48px}
+    h1{font-size:27px}
+    .card{padding:20px 18px}
+    .q-text{font-size:16.5px}
+    .nav{flex-direction:column-reverse}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow"><span class="dot"></span>PTT AŞ · Ulusal Elektronik Tebligat Sistemi · Mevzuat</div>
+    <h1>UETS <em>Mevzuat Testi</em></h1>
+    <p class="sub">Prosedür ve teknik kriterler dokümanları üzerinden çoktan seçmeli değerlendirme. Her soru kaynak maddesiyle birlikte gösterilir.</p>
+  </header>
+
+  <div id="app"></div>
+
+  <footer>
+    <span class="stamp">EPD.PR02 (Rev.1, 31.01.2025) · USE.002 (01.01.2019)</span>
+    Çalışma amaçlı hazırlanmıştır. Bağlayıcı metin yürürlükteki resmî dokümandır.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ───────── EPD.PR02 — Prosedür ─────────
+  {
+    doc:"EPD.PR02", art:"md. 3",
+    q:"UETS Prosedürü hangi kanunu dayanak alır?",
+    opts:[
+      "5809 Sayılı Elektronik Haberleşme Kanunu",
+      "7201 Sayılı Tebligat Kanunu (7/a, Ek 2, Geçici 2. madde)",
+      "5070 Sayılı Elektronik İmza Kanunu",
+      "6698 Sayılı Kişisel Verilerin Korunması Kanunu"
+    ],
+    a:1,
+    why:"Prosedür, 7201 Sayılı Tebligat Kanunu'nun 7/a, Ek 2 ve Geçici 2. maddeleri dayanak alınarak hazırlanmıştır."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.3.5",
+    q:"Elektronik yolla tebligat ne zaman yapılmış sayılır?",
+    opts:[
+      "Muhatap tebligatı açıp okuduğu anda",
+      "Muhatabın adresine ulaştığı anda",
+      "Adrese ulaştığı tarihi izleyen beşinci günün sonunda",
+      "Bilgilendirme mesajının gönderildiği tarihte"
+    ],
+    a:2,
+    why:"Tebligat, muhatabın elektronik tebligat adresine ulaştığı tarihi izleyen beşinci günün sonunda yapılmış sayılır — okunmuş olması şart değildir."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.8.1",
+    q:"Delil kayıtları arşivde kaç yıl muhafaza edilir?",
+    opts:["10 yıl","15 yıl","20 yıl","30 yıl"],
+    a:3,
+    why:"Delil kayıtları 30 yıl saklanır. İşlem kayıtları, iş sürekliliği kayıtları ve muhatabın erişim kayıtları ise 10'ar yıldır."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.8.1",
+    q:"Muhatabın UETS'ye erişim kayıtları kaç yıl saklanır?",
+    opts:["5 yıl","10 yıl","20 yıl","30 yıl"],
+    a:1,
+    why:"İşlem kayıtları, iş sürekliliği/bilgi güvenliği kayıtları ve erişim kayıtları 10 yıl; yalnızca delil kayıtları 30 yıldır."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.8.2",
+    q:"İşlem ve delil kayıtlarının silinmesi hangi şarta bağlıdır?",
+    opts:[
+      "Hesap sahibinin yazılı onayı alınmış olması",
+      "En az bir defa denetimden geçmiş olması",
+      "Saklama süresinin iki katının dolması",
+      "Adalet Bakanlığının silme talebi"
+    ],
+    a:1,
+    why:"Süre dolsa bile kayıt, en az bir kez denetimden geçmemişse silinemez. Amaç, hiç incelenmemiş bir kaydın geri dönülmez biçimde imha edilmesini önlemektir."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.1.2.1",
+    q:"İş yerine gitmeden online (e-Devlet/e-imza/mobil imza) hesap açma imkânı kimler için tanınmıştır?",
+    opts:[
+      "Tüm tüzel kişiler",
+      "Yalnızca kamu kurumları",
+      "Yalnızca gerçek kişiler",
+      "Zorunlu alıcıların tamamı"
+    ],
+    a:2,
+    why:"Sadece gerçek kişiler PTT iş yerine gelmeden online başvuru ekranından hesap açabilir; diğerleri PTT iş yerlerine başvurur."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.7.1",
+    q:"Tüzel kişiler bir UETS hesabı için en az ve en fazla kaç ana işlem yetkilisi belirleyebilir?",
+    opts:["En az 1 – en fazla 5","En az 1 – en fazla 10","En az 2 – en fazla 10","Sınır yoktur"],
+    a:1,
+    why:"Tüzel kişiler en az 1, en fazla 10 ana işlem yetkilisi belirleyip PTT'ye bildirir."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.3.4",
+    q:"Kamu kurumlarını yargı/icra mercileri önünde vekil sıfatıyla temsil eden kişiye yapılacak tebligat kime gönderilir?",
+    opts:[
+      "Doğrudan vekilin kişisel e-tebligat adresine",
+      "Vekilin bağlı bulunduğu birime",
+      "Hem vekile hem birime ayrı ayrı",
+      "Adalet Bakanlığına"
+    ],
+    a:1,
+    why:"Tebligat, temsile yetkili kişinin bağlı olduğu birime yapılır. Vekilin ayrı bir kişisel e-tebligat adresi olması bu kuralı değiştirmez."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.13",
+    q:"PTT AŞ'nin oluşturduğu elektronik tebligat delillerinin hukuki niteliği nedir?",
+    opts:[
+      "Karine niteliğinde, aksi her zaman ispatlanabilir",
+      "Bilgi amaçlı, hukuki bağlayıcılığı yoktur",
+      "Senet hükmünde; aksi ispat edilinceye kadar kesin delil",
+      "Yalnızca idari işlemlerde geçerli"
+    ],
+    a:2,
+    why:"Deliller senet hükmündedir ve aksi ispat edilinceye kadar kesin delil sayılır."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.1.1.1",
+    q:"Tebligatın elektronik yolla yapılması zorunlu olanlar için başvuru hangi süre içinde yapılır?",
+    opts:[
+      "Zorunluluğun başladığı tarihten itibaren 1 ay içinde",
+      "15 gün içinde",
+      "3 ay içinde",
+      "Süre sınırı yoktur"
+    ],
+    a:0,
+    why:"Zorunlu olanlar için başvuru, zorunluluğun başladığı tarihten itibaren 1 ay içinde ilgili kurum/kuruluş/birlik tarafından PTT'ye yapılır."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.11.2",
+    q:"Kullanıma kapatılan bir e-tebligat adresi ne kadar süre adres sahibinin erişimine açık tutulur?",
+    opts:["1 ay","3 ay","6 ay","1 yıl"],
+    a:2,
+    why:"Kapatılan adrese tebligat yapılamaz ancak 6 ay boyunca adres sahibinin erişimine açık tutulur; süre dolunca tamamen kapanır."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.12",
+    q:"PTT tarafından kapatılan bir e-tebligat adresi için aşağıdakilerden hangisi doğrudur?",
+    opts:[
+      "Başka bir kullanıcıya tahsis edilebilir",
+      "Farklı bir kullanıcıya tahsis edilemez",
+      "30 gün sonra otomatik silinir",
+      "Yalnızca tüzel kişiler yeniden açtırabilir"
+    ],
+    a:1,
+    why:"Kapatılan adres farklı kullanıcıya tahsis edilemez. Yalnızca gerçek kişiler, yeniden talep ve kimlik tespiti ile adreslerini tekrar açtırabilir."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.4.4",
+    q:"Muhataba yapılan bilgilendirmenin (SMS/e-posta) yapılamaması veya gecikmesi tebligatı nasıl etkiler?",
+    opts:[
+      "Tebligat geçersiz sayılır",
+      "Tebligat süresi yeniden başlar",
+      "Tebligatın geçerliliğini etkilemez",
+      "Tebligat 24 saat ertelenir"
+    ],
+    a:2,
+    why:"Bilgilendirmenin herhangi bir nedenle yapılamamış ya da geç yapılmış olması tebligatın geçerliliğini etkilemez."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.14.3",
+    q:"Bir hesabın UETS Rehberi'ne kaydı için hesap sahibinin onayı gerekir mi?",
+    opts:[
+      "Evet, açık onay şarttır",
+      "Hayır, onay alınmaksızın kaydedilir",
+      "Yalnızca tüzel kişilerde gerekir",
+      "Yalnızca isteğe bağlı hesaplarda gerekir"
+    ],
+    a:1,
+    why:"UETS'de kayıtlı tüm hesaplara (kamu, gerçek, tüzel) sahibinin onayı alınmaksızın rehberde yer verilir; hesap sahibi rehber kaydının silinmesini de talep edemez."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.17.3",
+    q:"Mücbir sebep kaç günden fazla sürerse, etkilenmeyen taraf sözleşmeyi feshedebilir?",
+    opts:["15 gün","30 gün","60 gün","90 gün"],
+    a:1,
+    why:"Mücbir sebep 30 günden fazla sürerse, etkilenmeyen taraf 30 gün önceden yazılı bildirimde bulunarak sözleşmeyi feshedebilir. Bu madde Rev.1 ile eklenmiştir."
+  },
+  {
+    doc:"EPD.PR02", art:"md. 6.20",
+    q:"PTT'nin e-tebligat hizmetini mevzuata uygun verip vermediğini denetleme yetkisi kimdedir?",
+    opts:["BTK","Adalet Bakanlığı","Sayıştay","Cumhurbaşkanlığı"],
+    a:1,
+    why:"Adalet Bakanlığı, PTT'nin elektronik tebligat hizmetini resen veya şikâyet üzerine her zaman denetleyebilir."
+  },
+
+  // ───────── USE.002 — Teknik Kriterler ─────────
+  {
+    doc:"USE.002", art:"md. 3",
+    q:"Teknik Kriterler Usul ve Esasları hangi düzenlemeye dayanır?",
+    opts:[
+      "7201 Sayılı Tebligat Kanunu",
+      "Elektronik Tebligat Yönetmeliği'nin 25/1 maddesi",
+      "5809 Sayılı Kanun",
+      "ISO/IEC 27001 standardı"
+    ],
+    a:1,
+    why:"Dayanak, 6/12/2018 tarihli ve 30617 sayılı Elektronik Tebligat Yönetmeliği'nin 25. maddesinin birinci fıkrasıdır."
+  },
+  {
+    doc:"USE.002", art:"md. 11",
+    q:"UETS hesap numarası kaç hanedir ve ilk hanesi neyi belirtir?",
+    opts:[
+      "10 hane – ilçe kodu",
+      "11 hane – T.C. kimlik bağlantısı",
+      "15 hane – gerçek/resmi tüzel/özel tüzel kişilik belirteci",
+      "16 hane – il kodu"
+    ],
+    a:2,
+    why:"Hesap numarası 15 hanelidir; ilk hanesi gerçek kişi, resmi tüzel ve özel tüzel kişilik ayrımının belirtecidir."
+  },
+  {
+    doc:"USE.002", art:"md. 9",
+    q:"Her tebligat hesabı için sunulan ücretsiz depolama alanı ve kota kuralı nedir?",
+    opts:[
+      "50 MB, ilk aydan itibaren kota uygulanır",
+      "En az 100 MB; ilk 6 ay kota uygulanmaz",
+      "1 GB, süresiz ücretsiz",
+      "Kota yoktur, tüm alan ücretlidir"
+    ],
+    a:1,
+    why:"PTT her hesaba en az 100 MB sunar; ilk 6 ay kota uygulanmaz. 6. ay sonunda aşan hesaplara talep üzerine ek arşiv hizmeti verilebilir."
+  },
+  {
+    doc:"USE.002", art:"md. 6",
+    q:"UETS'deki paket yapısı için hangi sürüm kullanılır?",
+    opts:["EYP 1.3","XAdES-A","CAdES-BES","EYP 2.0"],
+    a:0,
+    why:"Paket yapıları için Kalkınma Bakanlığı'nca belirlenmiş EYP (Elektronik Yazışma Paketi) 1.3 sürümü kullanılır."
+  },
+  {
+    doc:"USE.002", art:"md. 7",
+    q:"İmzalama yönteminde tebligat paketi ile deliller hangi formatlarla imzalanır?",
+    opts:[
+      "Paket: XAdES-XL / Deliller: CAdES-BES",
+      "Paket: CAdES-BES veya CAdES-A / Deliller: XAdES-XL",
+      "Her ikisi de PAdES",
+      "Paket: EYP 1.3 / Deliller: FIPS 140-2"
+    ],
+    a:1,
+    why:"Tebligat paketi CAdES-BES ya da CAdES-A; deliller XAdES-XL; işlem kayıtları/hash dosyaları ise XAdES-A ile imzalanır."
+  },
+  {
+    doc:"USE.002", art:"md. 13",
+    q:"PTT, UETS'nin işletilmesinde aşağıdaki standart üçlüsünden hangisine uyar?",
+    opts:[
+      "ISO 14001 – OHSAS 18001 – ISO 50001",
+      "ISO/IEC 27001 – ISO 9001 – ISO/IEC 22301",
+      "PCI-DSS – SOC 2 – HIPAA",
+      "ISO 27701 – ISO 31000 – ISO 20000"
+    ],
+    a:1,
+    why:"Bilgi güvenliği (ISO/IEC 27001), kalite (ISO 9001) ve iş sürekliliği (ISO/IEC 22301) standartlarına uyulur."
+  },
+  {
+    doc:"USE.002", art:"md. 16",
+    q:"Elektronik imza oluşturma araçları için aranan kriterlerden biri aşağıdakilerden hangisidir?",
+    opts:[
+      "FIPS PUB 140-2'ye göre en az Seviye 3 veya EAL4+",
+      "Yalnızca SSL/TLS sertifikası",
+      "ISO 9001 belgesi yeterlidir",
+      "Herhangi bir belge gerekmez"
+    ],
+    a:0,
+    why:"Araçlar FIPS PUB 140-2 Seviye 3+, veya CWA 14167-2 uygunluğu, veya CWA 14169 + ISO/IEC 15408'e göre en az EAL4+ kriterlerinden birini akredite belgeyle kanıtlamalıdır."
+  },
+  {
+    doc:"USE.002", art:"md. 5 / EK-1",
+    q:"\"Tebligat okundu kabul edildi\" (RetrievalTimeout) delili ne zaman üretilir?",
+    opts:[
+      "Alıcı tebligatı açtığı anda",
+      "Tebligat hesaba ulaştığı anda",
+      "Hesaba iletilmesinden sonra mevzuatla belirlenen süre dolunca otomatik",
+      "Gönderici talep ettiğinde"
+    ],
+    a:2,
+    why:"Bu delil, tebligatın alıcının hesabına iletilmesinin ardından mevzuatla belirlenen süre (5 gün) sonunda otomatik olarak üretilir."
+  },
+  {
+    doc:"USE.002", art:"md. 5 / EK-1",
+    q:"Entegrasyonla tebligat alan hesaba 24 saat içinde aktarım başarısız olursa hangi delil oluşur?",
+    opts:[
+      "Tebligat kabul edilmedi (Rejection)",
+      "Tebligat teslim edilmedi (NonDelivery)",
+      "Tebligat okundu (Retrieval)",
+      "Hesap pasif edildi (Disabled)"
+    ],
+    a:1,
+    why:"Hesaba konulamama veya entegrasyonla 24 saat içinde aktarılamama durumunda \"Tebligat teslim edilmedi\" (DeliveryNonDeliveryToRecipient:NonDelivery) delili oluşur."
+  },
+  {
+    doc:"USE.002", art:"EK-1 · TebAddress",
+    q:"Delil yapısındaki tebligat adresi (TebAddress) hangi formatta tutulur?",
+    opts:[
+      "12 rakam, XXXX-XXXX-XXXX",
+      "15 rakam, XXXXX-XXXXX-XXXXX",
+      "16 haneli IBAN benzeri yapı",
+      "UUID formatı"
+    ],
+    a:1,
+    why:"TebAddress, 15 rakamdan oluşan tebligat adresini XXXXX-XXXXX-XXXXX formatında barındırır."
+  },
+  {
+    doc:"USE.002", art:"md. 10",
+    q:"\"Mesleki Adres Rehberi Sorgulama Hakkı\" hangi meslek gruplarının tespiti için sağlanır?",
+    opts:[
+      "Memur, hâkim, savcı",
+      "Avukat, noter, bilirkişi, arabulucu",
+      "Doktor, eczacı, mühendis",
+      "Yalnızca avukatlar"
+    ],
+    a:1,
+    why:"Mesleği gereği e-tebligat adresi alması zorunlu olan avukat, noter, bilirkişi ve arabulucu gibi hesapların tespiti için bu hak tanınır."
+  },
+  {
+    doc:"USE.002", art:"EK-1",
+    q:"Delil yapısı (EK-1) hangi uluslararası standardın UETS'ye uyarlanmış halidir?",
+    opts:[
+      "ISO/IEC 27001",
+      "ETSI TS 102 640-2",
+      "FIPS PUB 140-2",
+      "W3C WCAG"
+    ],
+    a:1,
+    why:"Delil yapısı, ETSI TS 102 640-2 standardının UETS'ye göre yeniden uyarlanmasıyla oluşturulmuştur (versiyon 0.1)."
+  }
+];
+
+const VERDICTS = [
+  {min:90, t:"Mükemmel", d:"Her iki dokümana da hâkimsin."},
+  {min:75, t:"Çok iyi", d:"Konuya sağlam hâkimsin, birkaç ayrıntı kaldı."},
+  {min:55, t:"İyi", d:"Temeli tutuyorsun; yanlış maddeleri gözden geçir."},
+  {min:0,  t:"Tekrar zamanı", d:"Yanlışları inceleyip dokümanlara dönmek faydalı olur."}
+];
+
+const app = document.getElementById('app');
+let pool = [], idx = 0, answers = [], selectedScope = null;
+
+const DOCS = {
+  "EPD.PR02":{name:"Ulusal Elektronik Tebligat Sistemi Prosedürü"},
+  "USE.002":{name:"Teknik Kriterlere İlişkin Usul ve Esaslar"}
+};
+
+function shuffle(a){const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[x[i],x[j]]=[x[j],x[i]]}return x}
+
+function renderStart(){
+  const epd = QUESTIONS.filter(q=>q.doc==="EPD.PR02").length;
+  const use = QUESTIONS.filter(q=>q.doc==="USE.002").length;
+  app.innerHTML = `
+    <div class="card start">
+      <div class="deck">
+        <div class="deck-item"><span class="code">EPD.PR02</span><span class="meta"><strong>Ulusal Elektronik Tebligat Sistemi Prosedürü</strong><span>Rev.1 · 31.01.2025 · ${epd} soru</span></span></div>
+        <div class="deck-item"><span class="code">USE.002</span><span class="meta"><strong>Teknik Kriterlere İlişkin Usul ve Esaslar</strong><span>Yürürlük 01.01.2019 · ${use} soru</span></span></div>
+      </div>
+      <div class="pick-label">Kapsam seç</div>
+      <div class="picks">
+        <button class="pick" data-scope="all"><span>Her ikisi — karışık</span><span class="n">${QUESTIONS.length} soru</span></button>
+        <button class="pick" data-scope="EPD.PR02"><span>Yalnızca Prosedür (EPD.PR02)</span><span class="n">${epd} soru</span></button>
+        <button class="pick" data-scope="USE.002"><span>Yalnızca Teknik Kriterler (USE.002)</span><span class="n">${use} soru</span></button>
+      </div>
+      <button class="btn" id="startBtn" disabled>Teste başla</button>
+    </div>`;
+  app.querySelectorAll('.pick').forEach(b=>{
+    b.onclick=()=>{
+      app.querySelectorAll('.pick').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');
+      selectedScope=b.dataset.scope;
+      app.querySelector('#startBtn').disabled=false;
+    };
+  });
+  app.querySelector('#startBtn').onclick=start;
+}
+
+function start(){
+  const base = selectedScope==="all" ? QUESTIONS : QUESTIONS.filter(q=>q.doc===selectedScope);
+  pool = shuffle(base);
+  idx = 0; answers = [];
+  renderQ();
+}
+
+function renderQ(){
+  const q = pool[idx];
+  const pct = Math.round((idx)/pool.length*100);
+  app.innerHTML = `
+    <div class="card">
+      <div class="progress-row">
+        <div class="ptrack"><div class="pfill" style="width:${pct}%"></div></div>
+        <div class="pcount">${String(idx+1).padStart(2,'0')} / ${String(pool.length).padStart(2,'0')}</div>
+      </div>
+      <div class="q-source"><span class="code">${q.doc}</span><span class="art">${q.art}</span></div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts" id="opts"></div>
+      <div id="feedback"></div>
+    </div>`;
+  const optsEl = app.querySelector('#opts');
+  const keys = ['A','B','C','D','E'];
+  q.opts.forEach((o,i)=>{
+    const btn = document.createElement('button');
+    btn.className='opt';
+    btn.innerHTML = `<span class="key">${keys[i]}</span><span class="lbl">${o}</span>`;
+    btn.onclick = ()=>choose(i);
+    optsEl.appendChild(btn);
+  });
+}
+
+function choose(pick){
+  const q = pool[idx];
+  answers[idx] = pick;
+  const optBtns = app.querySelectorAll('.opt');
+  optBtns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.a){b.classList.add('correct');b.insertAdjacentHTML('beforeend','<span class="mark">Doğru</span>');}
+    else if(i===pick){b.classList.add('wrong');b.insertAdjacentHTML('beforeend','<span class="mark">✕</span>');}
+  });
+  const ok = pick===q.a;
+  const fb = app.querySelector('#feedback');
+  fb.innerHTML = `
+    <div class="explain ${ok?'':'miss'}"><b>${ok?'Doğru.':'Doğru cevap: '+['A','B','C','D','E'][q.a]+'.'}</b> ${q.why}</div>
+    <div class="nav">
+      <button class="btn" id="nextBtn">${idx+1<pool.length?'Sonraki soru':'Sonuçları gör'}</button>
+    </div>`;
+  fb.querySelector('#nextBtn').onclick=()=>{
+    if(idx+1<pool.length){idx++;renderQ();}
+    else renderResult();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+}
+
+function renderResult(){
+  const total = pool.length;
+  const correct = answers.reduce((s,a,i)=>s+(a===pool[i].a?1:0),0);
+  const pct = Math.round(correct/total*100);
+  const v = VERDICTS.find(x=>pct>=x.min);
+
+  // per-doc breakdown
+  const byDoc = {};
+  pool.forEach((q,i)=>{
+    if(!byDoc[q.doc]) byDoc[q.doc]={c:0,t:0};
+    byDoc[q.doc].t++;
+    if(answers[i]===q.a) byDoc[q.doc].c++;
+  });
+  const bdHtml = Object.keys(byDoc).map(d=>`
+    <div class="bd-row">
+      <div><div class="code">${d}</div><div class="name">${DOCS[d].name}</div></div>
+      <div class="frac">${byDoc[d].c}/${byDoc[d].t}</div>
+    </div>`).join('');
+
+  const circ = 2*Math.PI*64;
+  const off = circ*(1-pct/100);
+
+  const reviewHtml = pool.map((q,i)=>{
+    const ok = answers[i]===q.a;
+    const keys=['A','B','C','D','E'];
+    return `<div class="rv-item">
+      <div class="rv-q"><span class="ic ${ok?'ok':'no'}">${ok?'✓':'✕'}</span><span>${q.q} <span style="color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:11px">(${q.doc})</span></span></div>
+      ${ok?'':`<div class="rv-a">Senin cevabın: ${keys[answers[i]]} · <span class="good">Doğru: ${keys[q.a]} — ${q.opts[q.a]}</span></div>`}
+    </div>`;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="card result">
+      <div class="score-ring">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="64" fill="none" stroke="var(--mist)" stroke-width="11"/>
+          <circle cx="75" cy="75" r="64" fill="none" stroke="var(--brand)" stroke-width="11" stroke-linecap="round"
+            stroke-dasharray="${circ}" stroke-dashoffset="${circ}" id="ring"/>
+        </svg>
+        <div class="pct"><b>${pct}<span style="font-size:22px">%</span></b><span>${correct}/${total} DOĞRU</span></div>
+      </div>
+      <div class="verdict">${v.t}</div>
+      <div class="line">${v.d}</div>
+      <div class="breakdown">${bdHtml}</div>
+      <div class="nav">
+        <button class="btn ghost" id="reviewBtn">Yanlışları gör</button>
+        <button class="btn" id="againBtn">Yeniden başla</button>
+      </div>
+      <div class="review" id="review">${reviewHtml}</div>
+    </div>`;
+
+  requestAnimationFrame(()=>{
+    const r=app.querySelector('#ring');
+    if(r){r.style.transition='stroke-dashoffset 1s ease';r.style.strokeDashoffset=off;}
+  });
+  app.querySelector('#againBtn').onclick=renderStart;
+  app.querySelector('#reviewBtn').onclick=(e)=>{
+    const rv=app.querySelector('#review');
+    rv.classList.toggle('open');
+    e.target.textContent = rv.classList.contains('open')?'İncelemeyi gizle':'Yanlışları gör';
+  };
+}
+
+renderStart();
+</script>
+</body>
+</html>
